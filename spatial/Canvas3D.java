@@ -1,7 +1,6 @@
 package spatial;
 
 import java.awt.Canvas;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.geom.Point2D;
@@ -21,6 +20,10 @@ public class Canvas3D extends Canvas {
     private double[][] axes = new double[3][6];
     private double[][] ang = new double[2][3];
     private double[][] rot = new double[3][3];
+
+    public boolean drawAxes = true;
+    public boolean drawOctants = true;
+    public boolean drawPoints = true;
 
     public Canvas3D() {
 
@@ -47,18 +50,6 @@ public class Canvas3D extends Canvas {
 
     public double[] getPerspective() {
         return new double[] { this.xrot, this.yrot, this.zrot };
-    }
-
-    public double getWidth() {
-        return this.width;
-    }
-
-    public double getHeight() {
-        return this.height;
-    }
-
-    public double getDepth() {
-        return this.depth;
     }
 
     public double[][] getAxes() {
