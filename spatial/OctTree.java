@@ -147,33 +147,32 @@ public class OctTree {
         }
     }
 
-    public void octants(LinkedList<Box> boxes) {
-        if (this.subdivided) {
-            this.nw1.octants(boxes);
-            this.ne1.octants(boxes);
-            this.se1.octants(boxes);
-            this.sw1.octants(boxes);
-            this.nw2.octants(boxes);
-            this.ne2.octants(boxes);
-            this.se2.octants(boxes);
-            this.sw2.octants(boxes);
-        } else {
-            boxes.add(this.b);
-        }
+    public LinkedList<Shape3D> elements() {
+        return this.e;
     }
 
-    public void shapes(LinkedList<Shape3D> shapes) {
+    public Box bounds() {
+        return this.b;
+    }
+
+    public LinkedList<OctTree>  trees() {
+        LinkedList<OctTree> trees = new LinkedList<OctTree> ();
+        this.trees(trees);
+        return trees;
+    }
+
+    public void trees(LinkedList<OctTree> trees) {
         if (this.subdivided) {
-            this.nw1.shapes(shapes);
-            this.ne1.shapes(shapes);
-            this.se1.shapes(shapes);
-            this.sw1.shapes(shapes);
-            this.nw2.shapes(shapes);
-            this.ne2.shapes(shapes);
-            this.se2.shapes(shapes);
-            this.sw2.shapes(shapes);
+            this.nw1.trees(trees);
+            this.ne1.trees(trees);
+            this.se1.trees(trees);
+            this.sw1.trees(trees);
+            this.nw2.trees(trees);
+            this.ne2.trees(trees);
+            this.se2.trees(trees);
+            this.sw2.trees(trees);
         } else {
-            shapes.addAll(this.e);
+            trees.add(this);
         }
     }
 

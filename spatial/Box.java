@@ -34,21 +34,21 @@ public class Box implements Shape3D {
 
         // horizontal lines
         lines[0] = new double[] { this.x, this.y, this.z, this.getMaxX(), this.y, this.z };
-        lines[1] = new double[] { this.x, this.getMaxY(), this.z, this.w, this.getMaxY(), this.z };
-        lines[2] = new double[] { this.x, this.y, this.getMaxZ(), this.w, this.y, this.getMaxZ() };
-        lines[3] = new double[] { this.x, this.getMaxY(), this.getMaxZ(), this.w, this.getMaxY(), this.getMaxZ() };
+        lines[1] = new double[] { this.x, this.getMaxY(), this.z, this.getMaxX(), this.getMaxY(), this.z };
+        lines[2] = new double[] { this.x, this.y, this.getMaxZ(), this.getMaxX(), this.y, this.getMaxZ() };
+        lines[3] = new double[] { this.x, this.getMaxY(), this.getMaxZ(), this.getMaxX(), this.getMaxY(), this.getMaxZ() };
 
         // vertical lines
         lines[4] = new double[] { this.x, this.y, this.z, this.x, this.getMaxY(), this.z };
-        lines[5] = new double[] { this.w, this.y, this.z, this.w, this.getMaxY(), this.z };
+        lines[5] = new double[] { this.getMaxX(), this.y, this.z, this.getMaxX(), this.getMaxY(), this.z };
         lines[6] = new double[] { this.x, this.y, this.getMaxZ(), this.x, this.getMaxY(), this.getMaxZ() };
-        lines[7] = new double[] { this.w, this.y, this.getMaxZ(), this.w, this.getMaxY(), this.getMaxZ() };
+        lines[7] = new double[] { this.getMaxX(), this.y, this.getMaxZ(), this.getMaxX(), this.getMaxY(), this.getMaxZ() };
 
         // z lines
         lines[8] = new double[] { this.x, this.y, this.z, this.x, this.y, this.getMaxZ() };
-        lines[9] = new double[] { this.w, this.y, this.z, this.w, this.y, this.getMaxZ() };
+        lines[9] = new double[] { this.getMaxX(), this.y, this.z, this.getMaxX(), this.y, this.getMaxZ() };
         lines[10] = new double[] { this.x, this.getMaxY(), this.z, this.x, this.getMaxY(), this.getMaxZ() };
-        lines[11] = new double[] { this.w, this.getMaxY(), this.z, this.w, this.getMaxY(), this.getMaxZ() };
+        lines[11] = new double[] { this.getMaxX(), this.getMaxY(), this.z, this.getMaxX(), this.getMaxY(), this.getMaxZ() };
 
         return lines;
     }
