@@ -3,18 +3,22 @@ package spatial;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.Shape;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.stream.Stream;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JFrame;
+import java.util.Objects;
 
 public class QuadTree {
     private Rectangle2D b;
     private int n;
 
-    private LinkedList<Shape> e = new LinkedList<Shape>();
+    private LinkedList<Shape> e = new LinkedList<>();
 
     private QuadTree nw;
     private QuadTree ne;
@@ -29,80 +33,78 @@ public class QuadTree {
     }
 
     public void subdivide() {
-        double x = this.b.getX(), y = this.b.getY();
-        double w = this.b.getWidth() / 2, h = this.b.getHeight() / 2;
-        this.nw = new QuadTree(new Rectangle2D.Double(x, y, w, h), this.n);
-        this.ne = new QuadTree(new Rectangle2D.Double(x + w, y, w, h), this.n);
-        this.se = new QuadTree(new Rectangle2D.Double(x + w, y + h, w, h), this.n);
-        this.sw = new QuadTree(new Rectangle2D.Double(x, y + h, w, h), this.n);
+        double x = b.getX(), y = b.getY();
+        double w = b.getWidth() / 2, h = b.getHeight() / 2;
 
-        this.subdivided = true;
+        nw = new QuadTree(new Rectangle2D.Double(x, y, w, h), n);
+        ne = new QuadTree(new Rectangle2D.Double(x + w, y, w, h), n);
+        se = new QuadTree(new Rectangle2D.Double(x + w, y + h, w, h), n);
+        sw = new QuadTree(new Rectangle2D.Double(x, y + h, w, h), n);
 
-        for (Shape s : this.e) {
-            this.nw.insert(s);
-            this.ne.insert(s);
-            this.se.insert(s);
-            this.sw.insert(s);
+        subdivided = true;
+
+        for (Shape s : e) {
+            nw.insert(s);
+            ne.insert(s);
+            se.insert(s);
+            sw.insert(s);
         }
 
-        this.e.clear();
+        e.clear();
     }
 
     public boolean insert(Shape s) {
         // out-of-bounds, doesn't belong here
-        if (!this.b.contains(s.getBounds2D()))
+        if (!b.contains(s.getBounds2D()))
             return false;
 
         // check to see if there is more space
-        if (!this.subdivided && e.size() < this.n) {
-            this.e.add(s);
+        if (!subdivided && e.size() < n) {
+            e.add(s);
             return true;
         }
 
         // over-capacity, subdivide
-        if (!this.subdivided)
-            this.subdivide();
+        if (!subdivided)
+            subdivide();
 
         // need to insert into subtree
-        if (this.nw.insert(s))
+        if (nw.insert(s))
             return true;
-        if (this.ne.insert(s))
+        if (ne.insert(s))
             return true;
-        if (this.se.insert(s))
+        if (se.insert(s))
             return true;
-        if (this.sw.insert(s))
+        if (sw.insert(s))
             return true;
 
         // unreachable, added for return type guaranteeq
         return false;
     }
 
+    public QuadTree[] children() {
+        return new QuadTree[] { nw, ne, se, sw };
+    }
+
+    public Stream<QuadTree> traversal() {
+        return Stream.concat(Stream.of(this),
+                Arrays.stream(children()).filter(Objects::nonNull).flatMap(QuadTree::traversal));
+    }
+
     public void pprint(int lvl, String lab) {
         String tabs = new String(new char[lvl]).replace("\0", "\t");
 
-        if (this.e.isEmpty())
+        if (e.isEmpty())
             System.out.printf("%s%d %s\n", tabs, lvl, lab);
-        for (Shape s : this.e) {
+        for (Shape s : e) {
             System.out.printf("%s%d %s %s\n", tabs, lvl, lab, s.getBounds2D());
         }
 
-        if (this.subdivided) {
-            this.nw.pprint(lvl + 1, "nw");
-            this.ne.pprint(lvl + 1, "ne");
-            this.se.pprint(lvl + 1, "se");
-            this.sw.pprint(lvl + 1, "sw");
-        }
-    }
-
-    public void draw(Graphics2D g) {
-        g.draw(this.b);
-        for (Shape s : this.e)
-            g.draw(s);
-        if (this.subdivided) {
-            this.nw.draw(g);
-            this.ne.draw(g);
-            this.se.draw(g);
-            this.sw.draw(g);
+        if (subdivided) {
+            nw.pprint(lvl + 1, "nw");
+            ne.pprint(lvl + 1, "ne");
+            se.pprint(lvl + 1, "se");
+            sw.pprint(lvl + 1, "sw");
         }
     }
 
@@ -129,7 +131,9 @@ public class QuadTree {
 
             @Override
             public void paint(Graphics g) {
-                tree.draw((Graphics2D) g);
+                Graphics2D G = (Graphics2D) g;
+                tree.traversal().map(tree -> tree.e).flatMap(Collection::stream).forEach(ele -> G.draw(ele));
+                tree.traversal().forEach(tree -> G.draw(tree.b));
             }
         };
         canvas.setSize(w, h);

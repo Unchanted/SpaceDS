@@ -19,8 +19,8 @@ public class Main {
     private static final int dx = 10, dy = 10, dz = 10;
 
     private static final int r = 4;
-    private static final int n = 1;
-    private static final int N = 1000;
+    private static final int n = 100;
+    private static final int N = 10000;
 
     private static boolean drawAxes = true;
     private static boolean drawPoints = true;
@@ -49,10 +49,9 @@ public class Main {
                         G.draw(line);
                 // plot octants/points
                 for (OctTree ele : tree.trees()) {
-                    if (drawOctants)
-                        if (!(drawEmptyOctants && ele.elements().isEmpty()))
-                            for (Line2D.Double line : this.project_lines(ele.bounds().lines()))
-                                G.draw(line);
+                    if (drawOctants && !(drawEmptyOctants && ele.elements().isEmpty()))
+                        for (Line2D.Double line : this.project_lines(ele.bounds().lines()))
+                            G.draw(line);
                     if (drawPoints)
                         for (Point2D.Double p : this.project_points(
                                 ele.elements().stream().map(e -> e.getPoint()).collect(Collectors.toList())))
