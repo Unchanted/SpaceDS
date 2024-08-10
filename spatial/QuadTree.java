@@ -1,8 +1,14 @@
+package spatial;
+
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.Shape;
 import java.util.LinkedList;
 import java.util.Random;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JFrame;
 
 public class QuadTree {
     private Rectangle2D b;
@@ -12,8 +18,8 @@ public class QuadTree {
 
     private QuadTree nw;
     private QuadTree ne;
-    private QuadTree sw;
     private QuadTree se;
+    private QuadTree sw;
 
     private boolean subdivided = false;
 
@@ -88,18 +94,47 @@ public class QuadTree {
         }
     }
 
+    public void draw(Graphics2D g) {
+        g.draw(this.b);
+        for (Shape s : this.e)
+            g.draw(s);
+        if (this.subdivided) {
+            this.nw.draw(g);
+            this.ne.draw(g);
+            this.se.draw(g);
+            this.sw.draw(g);
+        }
+    }
+
     public static void main(String[] args) {
         long seed = 1;
 
-        int n = 4;
-        int N = 100;
+        int N = 1000;
 
-        QuadTree tree = new QuadTree(new Rectangle2D.Double(0, 0, 1000, 1000), n);
+        int n = 4;
+        int w = 1000;
+        int h = 1000;
+
+        QuadTree tree = new QuadTree(new Rectangle2D.Double(0, 0, w, h), n);
 
         Random prng = new Random(seed);
         for (int i = 0; i < N; i++)
-            tree.insert(new Ellipse2D.Double(prng.nextDouble() * 1000, prng.nextDouble() * 1000, 4, 4));
+            tree.insert(new Ellipse2D.Double(prng.nextDouble() * w + 1, prng.nextDouble() * h + 1, 4, 4));
 
         tree.pprint(0, "root");
+
+        JFrame frame = new JFrame("QuadTree");
+        Canvas canvas = new Canvas() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void paint(Graphics g) {
+                tree.draw((Graphics2D) g);
+            }
+        };
+        canvas.setSize(w, h);
+        frame.add(canvas);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
