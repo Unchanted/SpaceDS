@@ -110,4 +110,25 @@ public class OctTree {
         }
     }
 
+    public void octants(LinkedList<Box> boxes) {
+        if (this.subdivided) {
+            boxes.add(nw1.b);
+            boxes.add(ne1.b);
+            boxes.add(se1.b);
+            boxes.add(sw1.b);
+            boxes.add(nw2.b);
+            boxes.add(ne2.b);
+            boxes.add(se2.b);
+            boxes.add(sw2.b);
+            this.nw1.octants(boxes);
+            this.ne1.octants(boxes);
+            this.se1.octants(boxes);
+            this.sw1.octants(boxes);
+            this.nw2.octants(boxes);
+            this.ne2.octants(boxes);
+            this.se2.octants(boxes);
+            this.sw2.octants(boxes);
+        }
+    }
+
 }

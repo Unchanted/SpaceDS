@@ -73,7 +73,7 @@ public class QuadTree {
         if (this.sw.insert(s))
             return true;
 
-        // unreachable, added for return type guarantee
+        // unreachable, added for return type guaranteeq
         return false;
     }
 

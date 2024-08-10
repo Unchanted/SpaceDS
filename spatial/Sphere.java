@@ -1,6 +1,5 @@
 package spatial;
 
-
 public class Sphere implements Shape3D {
 
     private double x;
@@ -13,6 +12,22 @@ public class Sphere implements Shape3D {
         this.y = y;
         this.z = z;
         this.r = r;
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public double getZ() {
+        return this.z;
+    }
+
+    public Point3D getPoint() {
+        return new Point3D(this.x, this.y, this.z);
     }
 
     @Override
