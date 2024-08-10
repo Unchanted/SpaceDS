@@ -11,8 +11,12 @@ public class Point3D {
         this.z = z;
     }
 
+    public double[][] homogenize() {
+        return new double[][] { { x }, { y }, { z }, { 1 } };
+    }
+
     @Override
     public String toString() {
-        return String.format("%s[%f,%f,%f]", this.getClass().getName(), this.x, this.y, this.z);
+        return String.format("%s[%f,%f,%f]", this.getClass().getName(), x, y, z);
     }
 }

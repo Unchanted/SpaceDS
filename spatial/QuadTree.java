@@ -1,17 +1,10 @@
 package spatial;
 
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.Shape;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.stream.Stream;
-import java.awt.Canvas;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import javax.swing.JFrame;
 import java.util.Objects;
 
 public class QuadTree {
@@ -30,6 +23,14 @@ public class QuadTree {
     public QuadTree(Rectangle2D.Double b, int n) {
         this.b = b;
         this.n = n;
+    }
+
+    public LinkedList<Shape> elements() {
+        return e;
+    }
+
+    public Rectangle2D bounds() {
+        return b;
     }
 
     public void subdivide() {
@@ -86,9 +87,15 @@ public class QuadTree {
         return new QuadTree[] { nw, ne, se, sw };
     }
 
-    public Stream<QuadTree> traversal() {
+    public Stream<QuadTree> traverse() {
         return Stream.concat(Stream.of(this),
-                Arrays.stream(children()).filter(Objects::nonNull).flatMap(QuadTree::traversal));
+                Arrays.stream(children()).filter(Objects::nonNull).flatMap(QuadTree::traverse));
+    }
+
+    public void clear() {
+        nw = ne = se = sw = null;
+        e.clear();
+        subdivided = false;
     }
 
     public void pprint(int lvl, String lab) {
@@ -108,37 +115,4 @@ public class QuadTree {
         }
     }
 
-    public static void main(String[] args) {
-        long seed = 1;
-
-        int N = 1000;
-
-        int n = 4;
-        int w = 1000;
-        int h = 1000;
-
-        QuadTree tree = new QuadTree(new Rectangle2D.Double(0, 0, w, h), n);
-
-        Random prng = new Random(seed);
-        for (int i = 0; i < N; i++)
-            tree.insert(new Ellipse2D.Double(prng.nextDouble() * w + 1, prng.nextDouble() * h + 1, 4, 4));
-
-        tree.pprint(0, "root");
-
-        JFrame frame = new JFrame("QuadTree");
-        Canvas canvas = new Canvas() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void paint(Graphics g) {
-                Graphics2D G = (Graphics2D) g;
-                tree.traversal().map(tree -> tree.e).flatMap(Collection::stream).forEach(ele -> G.draw(ele));
-                tree.traversal().forEach(tree -> G.draw(tree.b));
-            }
-        };
-        canvas.setSize(w, h);
-        frame.add(canvas);
-        frame.pack();
-        frame.setVisible(true);
-    }
 }
