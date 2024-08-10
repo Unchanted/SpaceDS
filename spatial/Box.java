@@ -53,18 +53,30 @@ public class Box implements Shape3D {
         return this.z + this.d;
     }
 
+    public double[][] lines() {
+        double[][] lines = new double[12][6];
+        lines[0] = new double[] { this.x, this.y, this.z, this.getMaxX(), this.y, this.z };
+        lines[1] = new double[] { this.x, this.getMaxY(), this.z, this.getMaxX(), this.getMaxY(), this.z };
+        lines[2] = new double[] { this.x, this.y, this.getMaxZ(), this.getMaxX(), this.y, this.getMaxZ() };
+        lines[3] = new double[] { this.x, this.getMaxY(), this.getMaxZ(), this.getMaxX(), this.getMaxY(), this.getMaxZ() };
+
+        lines[4] = new double[] { this.x, this.y, this.z, this.x, this.getMaxY(), this.z };
+        lines[5] = new double[] { this.getMaxX(), this.y, this.z, this.getMaxX(), this.getMaxY(), this.z };
+        lines[6] = new double[] { this.x, this.y, this.getMaxZ(), this.x, this.getMaxY(), this.getMaxZ() };
+        lines[7] = new double[] { this.getMaxX(), this.y, this.getMaxZ(), this.getMaxX(), this.getMaxY(), this.getMaxZ() };
+
+        lines[8] = new double[] { this.x, this.y, this.z, this.x, this.y, this.getMaxZ() };
+        lines[9] = new double[] { this.getMaxX(), this.y, this.z, this.getMaxX(), this.y, this.getMaxZ() };
+        lines[10] = new double[] { this.x, this.getMaxY(), this.z, this.x, this.getMaxY(), this.getMaxZ() };
+        lines[11] = new double[] { this.getMaxX(), this.getMaxY(), this.z, this.getMaxX(), this.getMaxY(), this.getMaxZ() };
+
+        return lines;
+    }
+
     public boolean contains(Box b) {
         boolean x = this.x <= b.getX() && b.getMaxX() <= this.getMaxX();
         boolean y = this.y <= b.getY() && b.getMaxY() <= this.getMaxY();
         boolean z = this.z <= b.getZ() && b.getMaxZ() <= this.getMaxZ();
-        // boolean result = x && y && z;
-        // System.out.println(this);
-        // System.out.println(b);
-        // System.out.printf("%f <= %f && %f <= %f -> %b\n", this.x, b.getX(), b.getMaxX(), this.getMaxX(), x);
-        // System.out.printf("%f <= %f && %f <= %f -> %b\n", this.x, b.getY(), b.getMaxY(), this.getMaxY(), y);
-        // System.out.printf("%f <= %f && %f <= %f -> %b\n", this.x, b.getZ(), b.getMaxZ(), this.getMaxZ(), z);
-        // System.out.println(result);
-        // System.out.println();
         return x && y && z;
     }
 
