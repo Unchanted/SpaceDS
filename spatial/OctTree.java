@@ -1,6 +1,8 @@
 package spatial;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class OctTree {
     private Box b;
@@ -87,6 +89,41 @@ public class OctTree {
 
         // unreachable, added for return type guarantee
         return false;
+    }
+
+    public List<Shape3D> query(Shape3D inputPoint) {
+        List<Shape3D> queryList = new ArrayList<>();
+
+        System.out.println(subdivided);
+        // out-of-bounds, doesn't belong here
+        if (!this.b.contains(inputPoint.getBounds()))
+            return queryList;
+
+        // check to see if there is more space
+        if (!this.subdivided) {
+            if (inputPoint.getBounds().intersects(this.b)) {
+                queryList.addAll(e);
+            } else {
+                for (Shape3D point : e) {
+                    if (inputPoint.getBounds().intersects(point.getBounds())) {
+                        queryList.add(point);
+                    }
+                }
+            }
+        }
+
+        // need to insert into subtree
+        queryList.addAll(nw1.query(inputPoint));
+        queryList.addAll(ne1.query(inputPoint));
+        queryList.addAll(se1.query(inputPoint));
+        queryList.addAll(sw1.query(inputPoint));
+        queryList.addAll(nw2.query(inputPoint));
+        queryList.addAll(ne2.query(inputPoint));
+        queryList.addAll(se2.query(inputPoint));
+        queryList.addAll(sw2.query(inputPoint));
+
+        // unreachable, added for return type guarantee
+        return queryList;
     }
 
     public void pprint(int lvl, String lab) {

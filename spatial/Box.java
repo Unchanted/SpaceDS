@@ -1,12 +1,12 @@
 package spatial;
 
 public class Box implements Shape3D {
-    private double x;
-    private double y;
-    private double z;
-    private double w;
-    private double h;
-    private double d;
+    public double x;
+    public double y;
+    public double z;
+    public double w;
+    public double h;
+    public double d;
 
     public Box(double x, double y, double z, double w, double h, double d) {
         this.x = x;
@@ -15,30 +15,6 @@ public class Box implements Shape3D {
         this.w = w;
         this.h = h;
         this.d = d;
-    }
-
-    public double getX() {
-        return this.x;
-    }
-
-    public double getY() {
-        return this.y;
-    }
-
-    public double getZ() {
-        return this.z;
-    }
-
-    public double getWidth() {
-        return this.w;
-    }
-
-    public double getHeight() {
-        return this.h;
-    }
-
-    public double getDepth() {
-        return this.d;
     }
 
     public double getMaxX() {
@@ -55,7 +31,7 @@ public class Box implements Shape3D {
 
     public double[][] lines() {
         double[][] lines = new double[12][6];
-        
+
         // horizontal lines
         lines[0] = new double[] { this.x, this.y, this.z, this.getMaxX(), this.y, this.z };
         lines[1] = new double[] { this.x, this.getMaxY(), this.z, this.w, this.getMaxY(), this.z };
@@ -78,15 +54,27 @@ public class Box implements Shape3D {
     }
 
     public boolean contains(Box b) {
-        boolean x = this.x <= b.getX() && b.getMaxX() <= this.getMaxX();
-        boolean y = this.y <= b.getY() && b.getMaxY() <= this.getMaxY();
-        boolean z = this.z <= b.getZ() && b.getMaxZ() <= this.getMaxZ();
+        boolean x = this.x <= b.x && b.getMaxX() <= this.getMaxX();
+        boolean y = this.y <= b.y && b.getMaxY() <= this.getMaxY();
+        boolean z = this.z <= b.z && b.getMaxZ() <= this.getMaxZ();
+        return x && y && z;
+    }
+
+    public boolean intersects(Box b) {
+        boolean x = this.getMaxX() >= b.x && this.x >= b.getMaxX();
+        boolean y = this.getMaxY() >= b.y && this.y >= b.getMaxY();
+        boolean z = this.getMaxZ() >= b.z && this.z >= b.getMaxZ();
         return x && y && z;
     }
 
     @Override
     public Box getBounds() {
         return this;
+    }
+
+    @Override
+    public Point3D getPoint() {
+        return new Point3D(this.x, this.y, this.z);
     }
 
     @Override

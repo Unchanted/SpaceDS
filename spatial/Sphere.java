@@ -6,18 +6,26 @@ public class Sphere implements Shape3D {
     public double y;
     public double z;
     public double r;
+    private Box bounds;
 
     public Sphere(double x, double y, double z, double r) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.r = r;
+        double d = 2 * r;
+        this.bounds = new Box(this.x, this.y, this.z, d, d, d);
+    }
+
+    public void updateRadius(double radiusUpdate) {
+        this.r = radiusUpdate;
+        double d = 2 * this.r;
+        this.bounds = new Box(this.x, this.y, this.z, d, d, d);
     }
 
     @Override
     public Box getBounds() {
-        double d = 2 * r;
-        return new Box(this.x, this.y, this.z, d, d, d);
+        return bounds;
     }
 
     @Override
