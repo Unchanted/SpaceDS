@@ -4,7 +4,6 @@ trying out some spatial data structures with a 3D engine...
 
 ## OctTree
 
-![octtree](octtree.png "octtree")
 
 Key Commands:
 |key|action|
