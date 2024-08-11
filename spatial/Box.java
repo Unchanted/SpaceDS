@@ -43,11 +43,66 @@ public class Box implements Shape3D {
                 { new Point3D(x, y, getMaxZ()), new Point3D(x, getMaxY(), getMaxZ()) },
                 { new Point3D(getMaxX(), y, getMaxZ()), new Point3D(getMaxX(), getMaxY(), getMaxZ()) },
 
-                // z lines
+                // depth lines
                 { new Point3D(x, y, z), new Point3D(x, y, getMaxZ()) },
                 { new Point3D(getMaxX(), y, z), new Point3D(getMaxX(), y, getMaxZ()) },
                 { new Point3D(x, getMaxY(), z), new Point3D(x, getMaxY(), getMaxZ()) },
                 { new Point3D(getMaxX(), getMaxY(), z), new Point3D(getMaxX(), getMaxY(), getMaxZ()) } };
+    }
+
+    public Point3D[][] facePaths() {
+        return new Point3D[][] {
+                // front
+                // x, y, z -> X, y, z
+                // X, y, z -> X, Y, z
+                // X, Y, z -> x, Y, z
+                // x, Y, z -> x, y, z
+                { new Point3D(x, y, z), new Point3D(getMaxX(), y, z), new Point3D(getMaxX(), y, z),
+                        new Point3D(getMaxX(), getMaxY(), z), new Point3D(getMaxX(), getMaxY(), z),
+                        new Point3D(x, getMaxY(), z), new Point3D(x, getMaxY(), z), new Point3D(x, y, z) },
+                // back
+                // x, y, Z -> X, y, Z
+                // X, y, Z -> X, Y, Z
+                // X, Y, Z -> x, Y, Z
+                // x, Y, Z -> x, y, Z
+                { new Point3D(x, y, getMaxZ()), new Point3D(getMaxX(), y, getMaxZ()),
+                        new Point3D(getMaxX(), y, getMaxZ()), new Point3D(getMaxX(), getMaxY(), getMaxZ()),
+                        new Point3D(getMaxX(), getMaxY(), getMaxZ()), new Point3D(x, getMaxY(), getMaxZ()),
+                        new Point3D(x, getMaxY(), getMaxZ()), new Point3D(x, y, getMaxZ()) },
+                // left
+                // x, y, z -> x, y, Z
+                // x, y, Z -> x, Y, Z
+                // x, Y, Z -> x, Y, z
+                // x, Y, z -> x, y, z
+                { new Point3D(x, y, z), new Point3D(x, y, getMaxZ()), new Point3D(x, y, getMaxZ()),
+                        new Point3D(x, getMaxY(), getMaxZ()), new Point3D(x, getMaxY(), getMaxZ()),
+                        new Point3D(x, getMaxY(), z), new Point3D(x, getMaxY(), z), new Point3D(x, y, z) },
+                // right
+                // X, y, z -> X, y, Z
+                // X, y, Z -> X, Y, Z
+                // X, Y, Z -> X, Y, z
+                // X, Y, z -> X, y, z
+                { new Point3D(getMaxX(), y, z), new Point3D(getMaxX(), y, getMaxZ()),
+                        new Point3D(getMaxX(), y, getMaxZ()), new Point3D(getMaxX(), getMaxY(), getMaxZ()),
+                        new Point3D(getMaxX(), getMaxY(), getMaxZ()), new Point3D(getMaxX(), getMaxY(), z),
+                        new Point3D(getMaxX(), getMaxY(), z), new Point3D(getMaxX(), y, z) },
+                // top
+                // x, y, z -> x, y, Z
+                // x, y, Z -> X, y, Z
+                // X, y, Z -> X, y, z
+                // X, y, z -> x, y, z
+                { new Point3D(x, y, z), new Point3D(x, y, getMaxZ()), new Point3D(x, y, getMaxZ()),
+                        new Point3D(getMaxX(), y, getMaxZ()), new Point3D(getMaxX(), y, getMaxZ()),
+                        new Point3D(getMaxX(), y, z), new Point3D(getMaxX(), y, z), new Point3D(x, y, z) },
+                // bottom
+                // x, Y, z -> x, Y, Z
+                // x, Y, Z -> X, Y, Z
+                // X, Y, Z -> X, Y, z
+                // X, Y, z -> x, Y, z
+                { new Point3D(x, getMaxY(), z), new Point3D(x, getMaxY(), getMaxZ()),
+                        new Point3D(x, getMaxY(), getMaxZ()), new Point3D(getMaxX(), getMaxY(), getMaxZ()),
+                        new Point3D(getMaxX(), getMaxY(), getMaxZ()), new Point3D(getMaxX(), getMaxY(), z),
+                        new Point3D(getMaxX(), getMaxY(), z), new Point3D(x, getMaxY(), z) } };
     }
 
     public boolean contains(Box b) {
