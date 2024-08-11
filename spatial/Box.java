@@ -129,6 +129,10 @@ public class Box implements Shape3D {
         return new Point3D(x, y, z);
     }
 
+    public Point3D getCenter() {
+        return new Point3D(getMaxX() / 2, getMaxY() / 2, getMaxZ() / 2);
+    }
+
     @Override
     public String toString() {
         return String.format("%s[%f,%f,%f,%f,%f,%f]", this.getClass().getName(), this.x, this.y, this.z, this.w, this.h,

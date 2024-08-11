@@ -5,7 +5,7 @@ public class Sphere implements Shape3D {
     public double x;
     public double y;
     public double z;
-    public double r;
+    private double r;
     private Box bounds;
 
     public Sphere(double x, double y, double z, double r) {
@@ -17,10 +17,14 @@ public class Sphere implements Shape3D {
         this.bounds = new Box(this.x, this.y, this.z, d, d, d);
     }
 
-    public void updateRadius(double radiusUpdate) {
-        this.r = radiusUpdate;
+    public void setR(double r) {
+        this.r = r;
         double d = 2 * this.r;
-        this.bounds = new Box(this.x, this.y, this.z, d, d, d);
+        this.bounds = new Box(x, y, z, d, d, d);
+    }
+
+    public double getR() {
+        return r;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class Sphere implements Shape3D {
 
     @Override
     public Point3D getPoint() {
-        return new Point3D(this.x, this.y, this.z);
+        return new Point3D(x, y, z);
     }
 
 }

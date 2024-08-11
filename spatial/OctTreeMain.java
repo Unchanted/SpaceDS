@@ -3,7 +3,6 @@ package spatial;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
-import java.awt.geom.Line2D;
 import java.util.stream.Collectors;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
@@ -12,6 +11,7 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.geom.Path2D;
+import java.awt.Color;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
@@ -146,23 +146,29 @@ class OctTreeMain {
                                 G.draw(new Ellipse2D.Double(x[0][0] + w / 2, x[1][0] + h / 2, e.getR(), e.getR()));
                             });
                 // octants
-                G.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.015f));
+                G.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f));
+                Color[] colors = new Color[] { Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN,
+                        Color.BLUE, Color.PINK, Color.MAGENTA };
                 if (drawOctants)
                     tree.traverse().parallel().forEach(e -> {
-                        Path2D.Double path = new Path2D.Double();
-                        for (Point3D[] pts : e.bounds().facePaths()) {
-                            double[][] p = new double[3][1];
-                            mmult(P, pts[0].homogenize(), p);
-                            path.moveTo(p[0][0] + w / 2, p[1][0] + h / 2);
-                            for (int i = 1; i < pts.length; i++) {
-                                mclr(p);
-                                mmult(P, pts[i].homogenize(), p);
-                                path.lineTo(p[0][0] + w / 2, p[1][0] + h / 2);
+                        if (e.elements().size() > 0 || drawEmptyOctants) {
+                            Path2D.Double path = new Path2D.Double();
+                            for (Point3D[] pts : e.bounds().facePaths()) {
+                                double[][] p = new double[3][1];
+                                mmult(P, pts[0].homogenize(), p);
+                                path.moveTo(p[0][0] + w / 2, p[1][0] + h / 2);
+                                for (int i = 1; i < pts.length; i++) {
+                                    mclr(p);
+                                    mmult(P, pts[i].homogenize(), p);
+                                    path.lineTo(p[0][0] + w / 2, p[1][0] + h / 2);
+                                }
+                                path.closePath();
+                                G.setColor(colors[e.bounds().getCenter().getOctant()]);
+                                G.fill(path);
+                                G.setColor(Color.BLACK);
+                                G.draw(path);
+                                path.reset();
                             }
-                            path.closePath();
-                            G.fill(path);
-                            G.draw(path);
-                            path.reset();
                         }
                     });
             }
