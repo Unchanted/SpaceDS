@@ -1,4 +1,4 @@
-# SpatialDS
+# SpaceDS
 
 spatial data structures
 
