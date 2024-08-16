@@ -22,6 +22,27 @@ Key Commands:
 |m|re-initialize random walk|
 
 
+## Prerequisites 
+
+you should have jdk installed on your system
+
+
+## How to run the code 
+
+1. First, compile the java files:
+```java
+javac Box.java OctTree.java QuadTree.java Point3D.java Shape3D.java Sphere.javac
+```
+
+2. Then run either the octtree or quadtree main rogram 
+```java
+java OctTreeMain.java
+```
+or
+```java
+java QuadTreeMain.java
+```
+
 ---
 
 
